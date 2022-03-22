@@ -1,0 +1,15 @@
+:root {
+    --bg-color-back: burlywood;
+    --bg-color-mid: lightblue;
+    --txt-color: brown;
+}
+
+body {
+    background-color: var(--bg-color-back);
+}
+
+header {
+    background-color: var(--bg-color-mid);
+    color: var(--txt-color);
+    text-align: center;
+}
