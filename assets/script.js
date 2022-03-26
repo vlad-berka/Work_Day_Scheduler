@@ -8,7 +8,7 @@ var savedData = JSON.parse(localStorage.getItem("savedData"));
 
 // Variable to set the number of hours in a day - used for both the localStorage array
 // as well as the displayed hours in the day (length of day = hours +1)
-var lengthOfDay = 9;
+var lengthOfDay = 8;
 
 //Function checks to see if there is localStorage Data
 function checkForData() {
