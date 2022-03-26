@@ -1,32 +1,60 @@
+var current_DayEl = $('#currentDay');
+var current_TimeEl = $('#currentTime');
+var listContainer = $('.container');
+
+var rightNow = moment().format('dddd, MMMM Do, YYYY');
+var currentHour = moment().format("H");
+var currentClass = "past";
+
 function make_Hours () {
     var time_String = "";
 
-    document.body.appendChild(document.createElement("div"));
-    document.body.lastChild.setAttribute("class", "container-fluid");
+    if (currentHour == 8) {
+        currentClass = "present";
+    } else if (currentHour < 8) {
+        currentClass = "future";
+    }
 
-    for (let i=0; i<10; i++) {
-        if (i < 5)
+    $(".col-10").addClass(currentClass);
+
+    for (let i=9; i<20; i++) {
+        var new_Row = $("<section>").addClass('time-block row description');
+
+        if (i < 12)
         {
-            time_String = (8+i)+ " AM";
+            time_String = (i)+ " AM";
         }
         else {
-            time_String = (i-4)+ " PM";
+            time_String = (i-11)+ " PM";
         }
 
-        document.body.lastChild.appendChild(document.createElement("div"));
-        document.body.lastChild.lastChild.setAttribute("class", "row justify-content-center");
-        document.body.lastChild.lastChild.appendChild(document.createElement("div"));
-        document.body.lastChild.lastChild.lastChild.setAttribute("class", "col-1 text-right");
-        document.body.lastChild.lastChild.lastChild.textContent = time_String;
+        if (currentHour < i+1) {
+            currentClass = "future";
+        }else if (currentHour == i+1) {
+            currentClass = "present";
+        }
 
-        document.body.lastChild.lastChild.appendChild(document.createElement("div"));
-        document.body.lastChild.lastChild.lastChild.setAttribute("class", "col-8 text-center");
-        // document.body.lastChild.lastChild.lastChild.textContent = time_String;
+        console.log("comparing " +currentHour+ " to " +i);
+        
+        console.log(currentHour);
+        var timeEl = $('<div>').addClass('d-flex align-items-center justify-content-center hour col-1').text(time_String);
+        var textEl = $('<textarea>').addClass('col-10 '+currentClass).text("");
+        var buttonEl = $('<btn>').addClass('d-flex align-items-center justify-content-center saveBtn col-1').text("Save \n 💾");
 
-        document.body.lastChild.lastChild.appendChild(document.createElement("div"));
-        document.body.lastChild.lastChild.lastChild.setAttribute("class", "col-1 text-left");
-        // document.body.lastChild.lastChild.lastChild.textContent = time_String;
+        new_Row.append(timeEl, textEl, buttonEl);
+
+        listContainer.append(new_Row);
     }
 }
 
+function displayTime() {
+    rightNow = moment().format('dddd, MMMM Do, YYYY');
+    current_DayEl.text(rightNow);
+
+    rightNow = moment().format("hh:mm:ss A")
+    current_TimeEl.text(rightNow);
+}
+
 make_Hours();
+
+setInterval(displayTime, 1000);
