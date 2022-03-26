@@ -5,6 +5,31 @@ var listContainer = $('.container');
 var rightNow = moment().format('dddd, MMMM Do, YYYY');
 var currentHour = moment().format("H");
 var currentClass = "past";
+var savedData = JSON.parse(localStorage.getItem("savedData"));
+
+function checkForData() {
+    if (savedData == null){
+        console.log("savedData is null within checkForData");
+        savedData = [];
+        for (let i=8; i<18; i++){
+            savedData.push("");
+        }
+    }
+}
+
+function writeData() {
+    if (savedData == null){
+        console.log("savedData is null within writeData");
+        return;
+    }
+    else {
+        for (let j=0; j<savedData.length; j++) {
+            console.log("In writeData for loop at j= " +j);
+            console.log(savedData[j]);
+            $("textarea").find("[data-id='"+j+"']").text(savedData[j]);
+        }
+    }
+}
 
 function make_Hours () {
     var time_String = "";
@@ -15,7 +40,8 @@ function make_Hours () {
         currentClass = "future";
     }
 
-    $(".col-10").addClass(currentClass);
+    $(".col-10").addClass(currentClass).attr("data-id", "text0");
+    $(".saveBtn").attr("data-id", 0);
 
     for (let i=9; i<20; i++) {
         var new_Row = $("<section>").addClass('time-block row description');
@@ -34,12 +60,9 @@ function make_Hours () {
             currentClass = "present";
         }
 
-        console.log("comparing " +currentHour+ " to " +i);
-        
-        console.log(currentHour);
         var timeEl = $('<div>').addClass('d-flex align-items-center justify-content-center hour col-1').text(time_String);
-        var textEl = $('<textarea>').addClass('col-10 '+currentClass).text("");
-        var buttonEl = $('<btn>').addClass('d-flex align-items-center justify-content-center saveBtn col-1').text("Save \n 💾");
+        var textEl = $('<textarea>').addClass('col-10 '+currentClass).text("").attr("data-id", i-8);
+        var buttonEl = $('<btn>').addClass('d-flex align-items-center justify-content-center saveBtn col-1').attr("data-id", i-8).text("Save \n 💾");
 
         new_Row.append(timeEl, textEl, buttonEl);
 
@@ -55,6 +78,19 @@ function displayTime() {
     current_TimeEl.text(rightNow);
 }
 
-make_Hours();
+function saveMe(event) {
+    //Gets the value stored in the textarea and stores in the string textToSave
+    var textToSave = (event.target.parentNode.children[1].value);
+    //Gets the row ID number that corresponds to the localStorage index number
+    var storageIndex = (event.target.getAttribute("data-id"));
 
+    savedData[storageIndex] = textToSave;
+
+    localStorage.setItem("savedData", JSON.stringify(savedData));
+}
+
+checkForData();
+make_Hours();
+writeData();
 setInterval(displayTime, 1000);
+listContainer.on('click', saveMe);
