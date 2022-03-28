@@ -8,7 +8,7 @@ var savedData = JSON.parse(localStorage.getItem("savedData"));
 
 // Variable to set the number of hours in a day - used for both the localStorage array
 // as well as the displayed hours in the day (length of day = hours +1)
-var lengthOfDay = 8;
+var lengthOfDay = 9;
 
 //Function checks to see if there is localStorage Data
 function checkForData() {
@@ -55,14 +55,17 @@ function make_Hours () {
         {
             time_String = (i)+ " AM";
         }
+        else if (i==12){
+            time_String = (i)+ " PM";
+        }
         else {
-            time_String = (i-11)+ " PM";
+            time_String = (i-12)+ " PM";
         }
 
         //Logic statements to assign classes that format the rows using classes referenced by CSS
-        if (currentHour < i+1) {
+        if (currentHour < i) {
             currentClass = "future";
-        }else if (currentHour == i+1) {
+        }else if (currentHour == i) {
             currentClass = "present";
         }
 
